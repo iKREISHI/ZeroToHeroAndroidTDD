@@ -16,14 +16,18 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.allOf
 import org.junit.Assert.*
+import org.junit.FixMethodOrder
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.OrderWith
 import org.junit.runner.RunWith
+import org.junit.runners.MethodSorters
 
 /**
  * Please also check out unit test
  * @see ru.easycode.zerotoheroandroidtdd.CountTest
  */
+//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4::class)
 class Task011Test {
 
