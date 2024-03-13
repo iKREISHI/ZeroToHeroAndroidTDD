@@ -9,17 +9,39 @@ import android.widget.LinearLayout
 import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var linearLayout: LinearLayout
+    private lateinit var textView: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val linearLayout = findViewById<LinearLayout>(R.id.rootLayout)
+        linearLayout = findViewById(R.id.rootLayout)
         val button = findViewById<Button>(R.id.removeButton)
-        val textView = findViewById<TextView>(R.id.titleTextView)
+        textView = findViewById<TextView>(R.id.titleTextView)
         button.setOnClickListener {
             linearLayout.removeView(textView)
-//            textView.visibility = View.GONE
         }
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val removedTExtView = linearLayout.childCount == 1
+        outState.putBoolean(KEY, removedTExtView)
+    }
+
+    override fun onRestoreInstanceState(
+        savedInstanceState: Bundle,
+    ) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val removedTextView = savedInstanceState.getBoolean(KEY)
+        if (removedTextView) {
+            linearLayout.removeView(textView)
+        }
+    }
+
+    companion object {
+        private const val KEY = "key"
     }
 
 }
