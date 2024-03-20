@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/countTextView"
             android:text="0"
+            android:paddingHorizontal="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

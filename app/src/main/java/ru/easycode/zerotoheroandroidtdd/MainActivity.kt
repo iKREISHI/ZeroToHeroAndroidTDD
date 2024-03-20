@@ -1,24 +1,25 @@
 package ru.easycode.zerotoheroandroidtdd
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.widget.Button
 import android.widget.TextView
-import java.security.Key
+import androidx.annotation.RequiresApi
 
 class MainActivity : AppCompatActivity() {
     private lateinit var textView: TextView
     private lateinit var button: Button
-
+    private val count = Count.Base(2, 4)
+    private var uiState: UiState = UiState.Base("0")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         button = findViewById<Button>(R.id.incrementButton)
         textView = findViewById<TextView>(R.id.countTextView)
         button.setOnClickListener() {
-            textView.text = if (textView.text.toString().toInt() < 4) (textView.text.toString().toInt() + 2).toString() else textView.text.toString()
-            if (textView.text.toString().toInt() >= 4) button.isEnabled = false
+            uiState = count.increment(textView.text.toString())
+            uiState.apply(textView, button)
         }
     }
 
@@ -26,18 +27,21 @@ class MainActivity : AppCompatActivity() {
         outState: Bundle,
     ) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean(BTN_KEY, button.isEnabled)
-        outState.putString(TEXT_KEY, textView.text.toString())
+        outState.putSerializable(KEY, uiState)
     }
+
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        textView.text = savedInstanceState.getString(TEXT_KEY)
-        button.isEnabled = savedInstanceState.getBoolean(BTN_KEY)
+        uiState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            savedInstanceState.getSerializable(KEY, UiState::class.java) as UiState
+        } else {
+            savedInstanceState.getSerializable(KEY) as UiState
+        }
+        uiState.apply(textView, button)
     }
 
     companion object {
-        private const val TEXT_KEY = "textCount"
-        private const val BTN_KEY = "incrementBtn"
+        private const val KEY = "textCount"
     }
 }
